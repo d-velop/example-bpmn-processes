@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" targetNamespace="">
+  <process id="sync_service_process" name="Sync Service Process" isExecutable="true">
+    <extensionElements>
+      <camunda:properties>
+        <camunda:property name="service:/process/services/helloworld/sync:in:yourName" value="String" />
+        <camunda:property name="service:/process/services/helloworld/sync:out:greeting" value="String" />
+        <camunda:property name="variable:greeting" value="String" />
+      </camunda:properties>
+    </extensionElements>
+    <startEvent id="start" />
+    <sendTask id="call_service"
+          name="Call Service 'Hello World'"
+          camunda:asyncBefore="true"
+          camunda:asyncAfter="true"
+          camunda:delegateExpression="${syncService}"
+          camunda:exclusive="true">
+      <extensionElements>
+        <camunda:inputOutput>
+          <camunda:inputParameter name="service.uri">/process/services/helloworld/sync</camunda:inputParameter>
+          <camunda:inputParameter name="yourName">${variables.getDisplayValue("dv_initiator")}</camunda:inputParameter>
+          <camunda:outputParameter name="greeting">${variables.get("greeting")}</camunda:outputParameter>
+        </camunda:inputOutput>
+      </extensionElements>
+    </sendTask>
+    <userTask id="task_hello_world" name="${variables.get('greeting')}">
+      <humanPerformer>
+        <resourceAssignmentExpression>
+          <formalExpression>${variables.get("dv_initiator")}</formalExpression>
+        </resourceAssignmentExpression>
+      </humanPerformer>
+    </userTask>
+    <endEvent id="end" />
+    <sequenceFlow id="s1" sourceRef="start" targetRef="call_service" />
+    <sequenceFlow id="s2" sourceRef="call_service" targetRef="task_hello_world" />
+    <sequenceFlow id="s3" sourceRef="task_hello_world" targetRef="end" />
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane" bpmnElement="sync_service_process">
+      <bpmndi:BPMNShape id="start_di" bpmnElement="start">
+        <dc:Bounds x="173" y="102" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="s1_di" bpmnElement="s1">
+        <di:waypoint x="209" y="120" />
+        <di:waypoint x="250" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="call_service_di" bpmnElement="call_service">
+        <dc:Bounds x="250" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="s2_di" bpmnElement="s2">
+        <di:waypoint x="350" y="120" />
+        <di:waypoint x="390" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="task_hello_world_di" bpmnElement="task_hello_world">
+        <dc:Bounds x="390" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="s3_di" bpmnElement="s3">
+        <di:waypoint x="490" y="120" />
+        <di:waypoint x="532" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="end_di" bpmnElement="end">
+        <dc:Bounds x="532" y="102" width="36" height="36" />
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

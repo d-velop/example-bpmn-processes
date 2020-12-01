@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" targetNamespace="">
+  <process id="exclusive_gateway_process" name="Exclusive Gateway Process" isExecutable="true">
+    <extensionElements>
+      <camunda:properties>
+        <camunda:property name="variable:amount*" value="Number!" />
+      </camunda:properties>
+    </extensionElements>
+    <startEvent id="start" />
+    <exclusiveGateway id="gateway" default="gateway-option-b" />
+    <userTask id="task_hello_world" name="Hello World">
+      <humanPerformer>
+        <resourceAssignmentExpression>
+          <formalExpression>${variables.get("dv_initiator")}</formalExpression>
+        </resourceAssignmentExpression>
+      </humanPerformer>
+    </userTask>
+    <exclusiveGateway id="join" />
+    <endEvent id="end" />
+    <sequenceFlow id="s1" sourceRef="start" targetRef="gateway" />
+    <sequenceFlow id="gateway-option-a" sourceRef="gateway" targetRef="task_hello_world">
+      <conditionExpression xsi:type="tFormalExpression">${variables.get("amount") > 1000}</conditionExpression>
+    </sequenceFlow>
+    <sequenceFlow id="gateway-option-b" sourceRef="gateway" targetRef="join" />
+    <sequenceFlow id="s2" sourceRef="task_hello_world" targetRef="join" />
+    <sequenceFlow id="s3" sourceRef="join" targetRef="end" />
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="exclusive_gateway_process">
+      <bpmndi:BPMNShape id="start_di" bpmnElement="start">
+        <dc:Bounds x="179" y="199" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="gateway_di" bpmnElement="gateway" isMarkerVisible="true">
+        <dc:Bounds x="275" y="192" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="task_hello_world_di" bpmnElement="task_hello_world">
+        <dc:Bounds x="410" y="80" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="join_di" bpmnElement="join" isMarkerVisible="true">
+        <dc:Bounds x="595" y="192" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="end_di" bpmnElement="end">
+        <dc:Bounds x="702" y="199" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="s1_di" bpmnElement="s1">
+        <di:waypoint x="215" y="217" />
+        <di:waypoint x="275" y="217" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="gateway-option-a_di" bpmnElement="gateway-option-a">
+        <di:waypoint x="300" y="192" />
+        <di:waypoint x="300" y="120" />
+        <di:waypoint x="410" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="gateway-option-b_di" bpmnElement="gateway-option-b">
+        <di:waypoint x="325" y="217" />
+        <di:waypoint x="595" y="217" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="s2_di" bpmnElement="s2">
+        <di:waypoint x="510" y="120" />
+        <di:waypoint x="620" y="120" />
+        <di:waypoint x="620" y="192" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="s3_di" bpmnElement="s3">
+        <di:waypoint x="645" y="217" />
+        <di:waypoint x="702" y="217" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

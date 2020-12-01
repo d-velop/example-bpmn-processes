@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" targetNamespace="">
+  <process id="multi_instance_process" name="Multi Instance Process" isExecutable="true">
+    <extensionElements>
+      <camunda:properties>
+        <camunda:property name="variable:performers*" value="[Identity]!" />
+      </camunda:properties>
+    </extensionElements>
+    <startEvent id="start" />
+    <userTask id="task_hello_world" name="Hello World">
+      <extensionElements>
+        <camunda:properties>
+          <camunda:property name="variable:myPerformer" value="Identity" />
+        </camunda:properties>
+      </extensionElements>
+      <humanPerformer>
+        <resourceAssignmentExpression>
+          <formalExpression>${variables.get("myPerformer")}</formalExpression>
+        </resourceAssignmentExpression>
+      </humanPerformer>
+      <multiInstanceLoopCharacteristics
+            isSequential="false"
+            camunda:collection="${variables.get('performers')}"
+            camunda:elementVariable="myPerformer" />
+    </userTask>
+    <endEvent id="end" />
+    <sequenceFlow id="s1" sourceRef="start" targetRef="task_hello_world" />
+    <sequenceFlow id="s2" sourceRef="task_hello_world" targetRef="end" />
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="multi_instance_process">
+      <bpmndi:BPMNShape id="start_di" bpmnElement="start">
+        <dc:Bounds x="179" y="99" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="task_hello_world_di" bpmnElement="task_hello_world">
+        <dc:Bounds x="290" y="77" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="end_di" bpmnElement="end">
+        <dc:Bounds x="462" y="99" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="s1_di" bpmnElement="s1">
+        <di:waypoint x="215" y="117" />
+        <di:waypoint x="290" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="s2_di" bpmnElement="s2">
+        <di:waypoint x="390" y="117" />
+        <di:waypoint x="462" y="117" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>
