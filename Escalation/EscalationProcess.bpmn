@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" targetNamespace="">
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI"  xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" targetNamespace="">
   <process id="escalation_process" name="Escalation Process" isExecutable="true">
     <extensionElements>
       <camunda:properties>
@@ -8,13 +8,7 @@
     </extensionElements>
 
     <startEvent id="start" />
-    <userTask id="task_hello_world" name="Hello World">
-      <humanPerformer>
-        <resourceAssignmentExpression>
-          <formalExpression>${variables.get("dv_initiator")}</formalExpression>
-        </resourceAssignmentExpression>
-      </humanPerformer>
-    </userTask>
+    <userTask id="task_hello_world" name="Hello World" camunda:assignee="${variables.get('dv_initiator')}" />    
     <boundaryEvent id="timer" attachedToRef="task_hello_world">
       <timerEventDefinition>
         <timeDuration>PT1M</timeDuration>
@@ -34,13 +28,7 @@
       <startEvent id="sub_start" isInterrupting="false">
         <escalationEventDefinition escalationRef="time_escalation" camunda:escalationCodeVariable="escalationCode" />
       </startEvent>
-      <userTask id="sub_task_escalation" name="Escalation occurred">
-        <humanPerformer>
-          <resourceAssignmentExpression>
-            <formalExpression>${variables.get("dv_initiator")}</formalExpression>
-          </resourceAssignmentExpression>
-        </humanPerformer>
-      </userTask>
+      <userTask id="sub_task_escalation" name="Escalation occurred" camunda:assignee="${variables.get('dv_initiator')}" />
       <endEvent id="sub_end" />
       <sequenceFlow id="sub_s1" sourceRef="sub_start" targetRef="sub_task_escalation" />
       <sequenceFlow id="sub_s2" sourceRef="sub_task_escalation" targetRef="sub_end" />
@@ -49,6 +37,7 @@
   </process>
   <escalation id="time_escalation" name="Time Escalation" escalationCode="123" />
 
+  <!-- Diagram information -->
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="escalation_process">
       <bpmndi:BPMNShape id="start_di" bpmnElement="start">

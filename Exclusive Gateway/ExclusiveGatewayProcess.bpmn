@@ -8,13 +8,7 @@
     </extensionElements>
     <startEvent id="start" />
     <exclusiveGateway id="gateway" default="gateway-option-b" />
-    <userTask id="task_hello_world" name="Hello World">
-      <humanPerformer>
-        <resourceAssignmentExpression>
-          <formalExpression>${variables.get("dv_initiator")}</formalExpression>
-        </resourceAssignmentExpression>
-      </humanPerformer>
-    </userTask>
+    <userTask id="task_hello_world" name="Hello World" camunda:assignee="${variables.get('dv_initiator')}" />
     <exclusiveGateway id="join" />
     <endEvent id="end" />
     <sequenceFlow id="s1" sourceRef="start" targetRef="gateway" />
@@ -25,6 +19,8 @@
     <sequenceFlow id="s2" sourceRef="task_hello_world" targetRef="join" />
     <sequenceFlow id="s3" sourceRef="join" targetRef="end" />
   </process>
+  
+  <!-- Diagram information -->
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="exclusive_gateway_process">
       <bpmndi:BPMNShape id="start_di" bpmnElement="start">

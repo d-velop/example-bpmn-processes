@@ -23,18 +23,14 @@
         </camunda:inputOutput>
       </extensionElements>
     </sendTask>
-    <userTask id="task_hello_world" name="${variables.get('greeting')}">
-      <humanPerformer>
-        <resourceAssignmentExpression>
-          <formalExpression>${variables.get("dv_initiator")}</formalExpression>
-        </resourceAssignmentExpression>
-      </humanPerformer>
-    </userTask>
+    <userTask id="task_hello_world" name="${variables.get('greeting')}" camunda:assignee="${variables.get('dv_initiator')}" />      
     <endEvent id="end" />
     <sequenceFlow id="s1" sourceRef="start" targetRef="call_service" />
     <sequenceFlow id="s2" sourceRef="call_service" targetRef="task_hello_world" />
     <sequenceFlow id="s3" sourceRef="task_hello_world" targetRef="end" />
   </process>
+     
+  <!-- Diagram information -->
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane" bpmnElement="sync_service_process">
       <bpmndi:BPMNShape id="start_di" bpmnElement="start">

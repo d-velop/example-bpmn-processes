@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" targetNamespace="">
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" targetNamespace="" exporter="Camunda Modeler" exporterVersion="4.3.0">
   <process id="async_service_process" name="Async Service Process" isExecutable="true">
     <extensionElements>
       <camunda:properties>
@@ -9,11 +9,7 @@
       </camunda:properties>
     </extensionElements>
     <startEvent id="start" />
-    <sendTask id="call_service"
-          name="Call Service 'Hello World'"
-          camunda:asyncBefore="true"
-          camunda:delegateExpression="${asyncService}"
-          camunda:exclusive="true">
+    <sendTask id="call_service" name="Call Service &#39;Hello World&#39;" camunda:asyncBefore="true" camunda:delegateExpression="${asyncService}">
       <extensionElements>
         <camunda:inputOutput>
           <camunda:inputParameter name="service.uri">/process/services/helloworld/async</camunda:inputParameter>
@@ -21,59 +17,52 @@
         </camunda:inputOutput>
       </extensionElements>
     </sendTask>
-    <receiveTask id="receive_service_response"
-          name="Wait for Service 'Hello World'"
-          camunda:asyncAfter="true"
-          camunda:exclusive="true">
+    <receiveTask id="receive_service_response" name="Wait for Service &#39;Hello World&#39;" camunda:asyncAfter="true">
       <extensionElements>
         <camunda:inputOutput>
           <camunda:outputParameter name="greeting">${variables.get("greeting")}</camunda:outputParameter>
         </camunda:inputOutput>
       </extensionElements>
     </receiveTask>
-    <userTask id="task_hello_world" name="${variables.get('greeting')}">
-      <humanPerformer>
-        <resourceAssignmentExpression>
-          <formalExpression>${variables.get("dv_initiator")}</formalExpression>
-        </resourceAssignmentExpression>
-      </humanPerformer>
-    </userTask>
+    <userTask id="task_hello_world" name="${variables.get('greeting')}" camunda:assignee="${variables.get('dv_initiator')}" />
     <endEvent id="end" />
     <sequenceFlow id="s1" sourceRef="start" targetRef="call_service" />
     <sequenceFlow id="s2" sourceRef="call_service" targetRef="receive_service_response" />
     <sequenceFlow id="s3" sourceRef="receive_service_response" targetRef="task_hello_world" />
     <sequenceFlow id="s4" sourceRef="task_hello_world" targetRef="end" />
   </process>
+     
+  <!-- Diagram information -->
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="async_service_process">
-      <bpmndi:BPMNShape id="start_di" bpmnElement="start">
-        <dc:Bounds x="179" y="99" width="36" height="36" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="s1_di" bpmnElement="s1">
-        <di:waypoint x="215" y="117" />
-        <di:waypoint x="250" y="117" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="call_service_di" bpmnElement="call_service">
-        <dc:Bounds x="250" y="77" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="s2_di" bpmnElement="s2">
-        <di:waypoint x="350" y="117" />
-        <di:waypoint x="390" y="117" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="receive_service_response_di" bpmnElement="receive_service_response">
-        <dc:Bounds x="390" y="77" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="s3_di" bpmnElement="s3">
-        <di:waypoint x="490" y="117" />
-        <di:waypoint x="530" y="117" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNShape id="task_hello_world_di" bpmnElement="task_hello_world">
-        <dc:Bounds x="530" y="77" width="100" height="80" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="s4_di" bpmnElement="s4">
         <di:waypoint x="630" y="117" />
         <di:waypoint x="662" y="117" />
       </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="s3_di" bpmnElement="s3">
+        <di:waypoint x="490" y="117" />
+        <di:waypoint x="530" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="s2_di" bpmnElement="s2">
+        <di:waypoint x="350" y="117" />
+        <di:waypoint x="390" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="s1_di" bpmnElement="s1">
+        <di:waypoint x="215" y="117" />
+        <di:waypoint x="250" y="117" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="start_di" bpmnElement="start">
+        <dc:Bounds x="179" y="99" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="call_service_di" bpmnElement="call_service">
+        <dc:Bounds x="250" y="77" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="receive_service_response_di" bpmnElement="receive_service_response">
+        <dc:Bounds x="390" y="77" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="task_hello_world_di" bpmnElement="task_hello_world">
+        <dc:Bounds x="530" y="77" width="100" height="80" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="end_di" bpmnElement="end">
         <dc:Bounds x="662" y="99" width="36" height="36" />
       </bpmndi:BPMNShape>

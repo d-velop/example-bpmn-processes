@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" targetNamespace="">
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" targetNamespace="">
   <process id="multi_instance_process" name="Multi Instance Process" isExecutable="true">
     <extensionElements>
       <camunda:properties>
@@ -7,17 +7,12 @@
       </camunda:properties>
     </extensionElements>
     <startEvent id="start" />
-    <userTask id="task_hello_world" name="Hello World">
+    <userTask id="task_hello_world" name="Hello World" camunda:assignee="${variables.get('myPerformer')}" >
       <extensionElements>
         <camunda:properties>
           <camunda:property name="variable:myPerformer" value="Identity" />
         </camunda:properties>
       </extensionElements>
-      <humanPerformer>
-        <resourceAssignmentExpression>
-          <formalExpression>${variables.get("myPerformer")}</formalExpression>
-        </resourceAssignmentExpression>
-      </humanPerformer>
       <multiInstanceLoopCharacteristics
             isSequential="false"
             camunda:collection="${variables.get('performers')}"
@@ -27,6 +22,8 @@
     <sequenceFlow id="s1" sourceRef="start" targetRef="task_hello_world" />
     <sequenceFlow id="s2" sourceRef="task_hello_world" targetRef="end" />
   </process>
+    
+  <!-- Diagram information -->
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="multi_instance_process">
       <bpmndi:BPMNShape id="start_di" bpmnElement="start">

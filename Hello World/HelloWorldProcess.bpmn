@@ -1,18 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" targetNamespace="">
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" targetNamespace="">
   <process id="hello_world_process" name="Hello World Process" isExecutable="true">
     <startEvent id="start" />
     <sequenceFlow id="s1" sourceRef="start" targetRef="task_hello_world" />
-    <userTask id="task_hello_world" name="Hello World">
-      <humanPerformer>
-        <resourceAssignmentExpression>
-          <formalExpression>${variables.get("dv_initiator")}</formalExpression>
-        </resourceAssignmentExpression>
-      </humanPerformer>
-    </userTask>
+    <userTask id="task_hello_world" name="Hello World" camunda:assignee="${variables.get('dv_initiator')}" />   
     <sequenceFlow id="s2" sourceRef="task_hello_world" targetRef="end" />
     <endEvent id="end" />
   </process>
+    
+  <!-- Diagram information -->
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane" bpmnElement="hello_world_process">
       <bpmndi:BPMNShape id="start_di" bpmnElement="start">
