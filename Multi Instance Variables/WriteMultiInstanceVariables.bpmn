@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_15mqym4" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.5.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.18.0">
+  <bpmn:process id="writeMultiInstanceVariables" name="WriteMultiInstanceVariables" isExecutable="true">
+    <bpmn:extensionElements>
+      <camunda:properties>
+        <camunda:property name="variable:allAssignees*" value="[Identity]!" />
+        <camunda:property name="variable:assignee" value="Identity" />
+        <camunda:property name="variable:decision" value="String" />
+        <camunda:property name="variable:allDecisions" value="[String]" />
+      </camunda:properties>
+    </bpmn:extensionElements>
+    <bpmn:startEvent id="start" />
+    <bpmn:endEvent id="end" />
+    <bpmn:sequenceFlow id="s1" sourceRef="start" targetRef="subflow" />
+    <bpmn:subProcess id="subflow">
+      <bpmn:multiInstanceLoopCharacteristics camunda:collection="${variables.get(&#39;allAssignees&#39;)}" camunda:elementVariable="assignee" />
+      <bpmn:startEvent id="subflow_start" />
+      <bpmn:sequenceFlow id="s2-1" sourceRef="subflow_start" targetRef="subflow_usertask" />
+      <bpmn:endEvent id="subflow_end" />
+      <bpmn:sequenceFlow id="s2-2" sourceRef="subflow_usertask" targetRef="writeDecision" />
+      <bpmn:userTask id="subflow_usertask" name="Decision" camunda:assignee="${variables.get(&#39;assignee&#39;)}" />
+      <bpmn:sequenceFlow id="s2-3" sourceRef="writeDecision" targetRef="subflow_end" />
+      <bpmn:serviceTask id="writeDecision" name="Write decision to global scope" camunda:asyncBefore="true" camunda:asyncAfter="true" camunda:delegateExpression="${writeMultiInstanceVariables}">
+        <bpmn:extensionElements>
+          <camunda:failedJobRetryTimeCycle>R3/PT5M</camunda:failedJobRetryTimeCycle>
+          <camunda:inputOutput>
+            <camunda:inputParameter name="allDecisions">${variables.get('decision')}</camunda:inputParameter>
+          </camunda:inputOutput>
+        </bpmn:extensionElements>
+      </bpmn:serviceTask>
+    </bpmn:subProcess>
+    <bpmn:sequenceFlow id="s3" sourceRef="subflow" targetRef="end" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="writeMultiInstanceVariables">
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="start">
+        <dc:Bounds x="179" y="159" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0ssel47_di" bpmnElement="end">
+        <dc:Bounds x="912" y="159" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0li7yi3_di" bpmnElement="subflow" isExpanded="true">
+        <dc:Bounds x="300" y="77" width="490" height="200" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0ybst54_di" bpmnElement="subflow_start">
+        <dc:Bounds x="340" y="159" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_0f9450b_di" bpmnElement="subflow_end">
+        <dc:Bounds x="712" y="159" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1qx66xt_di" bpmnElement="subflow_usertask">
+        <dc:Bounds x="430" y="137" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_13t76uu_di" bpmnElement="writeDecision">
+        <dc:Bounds x="570" y="137" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_146y71c_di" bpmnElement="s2-1">
+        <di:waypoint x="376" y="177" />
+        <di:waypoint x="430" y="177" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1yq9qcz_di" bpmnElement="s2-2">
+        <di:waypoint x="530" y="177" />
+        <di:waypoint x="570" y="177" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1huut97_di" bpmnElement="s2-3">
+        <di:waypoint x="670" y="177" />
+        <di:waypoint x="712" y="177" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1o99dar_di" bpmnElement="s1">
+        <di:waypoint x="215" y="177" />
+        <di:waypoint x="300" y="177" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_13w0opv_di" bpmnElement="s3">
+        <di:waypoint x="790" y="177" />
+        <di:waypoint x="912" y="177" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
