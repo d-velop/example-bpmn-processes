@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_15mqym4" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.5.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.18.0">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_15mqym4" targetNamespace="http://bpmn.io/schema/bpmn"  exporter="d.velop process modeler" exporterVersion="1.0.0" modeler:executionPlatform="Camunda Platform" modeler:executionPlatformVersion="7.18.0">
   <bpmn:process id="writeMultiInstanceVariables" name="WriteMultiInstanceVariables" isExecutable="true">
     <bpmn:extensionElements>
       <camunda:properties>
@@ -18,7 +18,7 @@
       <bpmn:sequenceFlow id="s2-1" sourceRef="subflow_start" targetRef="subflow_usertask" />
       <bpmn:endEvent id="subflow_end" />
       <bpmn:sequenceFlow id="s2-2" sourceRef="subflow_usertask" targetRef="writeDecision" />
-      <bpmn:userTask id="subflow_usertask" name="Decision" camunda:assignee="${variables.get(&#39;assignee&#39;)}" />
+      <bpmn:userTask id="subflow_usertask" name="Decision" camunda:candidateUsers="${variables.get('assignee')}" camunda:priority="50" />
       <bpmn:sequenceFlow id="s2-3" sourceRef="writeDecision" targetRef="subflow_end" />
       <bpmn:serviceTask id="writeDecision" name="Write decision to global scope" camunda:asyncBefore="true" camunda:asyncAfter="true" camunda:delegateExpression="${writeMultiInstanceVariables}">
         <bpmn:extensionElements>

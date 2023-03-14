@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" targetNamespace="">
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" targetNamespace="" exporter="d.velop process modeler" exporterVersion="1.0.0">
   <process id="exclusive_gateway_process" name="Exclusive Gateway Process" isExecutable="true">
     <extensionElements>
       <camunda:properties>
@@ -8,12 +8,12 @@
     </extensionElements>
     <startEvent id="start" />
     <exclusiveGateway id="gateway" default="gateway-option-b" />
-    <userTask id="task_hello_world" name="Hello World" camunda:assignee="${variables.get('dv_initiator')}" />
+    <userTask id="task_hello_world" name="Hello World" camunda:candidateUsers="${variables.get('dv_initiator')}" camunda:priority="50" />
     <exclusiveGateway id="join" />
     <endEvent id="end" />
     <sequenceFlow id="s1" sourceRef="start" targetRef="gateway" />
     <sequenceFlow id="gateway-option-a" sourceRef="gateway" targetRef="task_hello_world">
-      <conditionExpression xsi:type="tFormalExpression">${variables.get("amount") > 1000}</conditionExpression>
+      <conditionExpression xsi:type="tFormalExpression">#{variables.get("amount") > 1000}</conditionExpression>
     </sequenceFlow>
     <sequenceFlow id="gateway-option-b" sourceRef="gateway" targetRef="join" />
     <sequenceFlow id="s2" sourceRef="task_hello_world" targetRef="join" />

@@ -1,18 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" targetNamespace="">
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" targetNamespace="" exporter="d.velop process modeler" exporterVersion="1.0.0">
   <process id="multi_instance_process" name="Multi Instance Process" isExecutable="true">
     <extensionElements>
       <camunda:properties>
         <camunda:property name="variable:performers*" value="[Identity]!" />
+        <camunda:property name="variable:myPerformer" value="Identity" />
       </camunda:properties>
     </extensionElements>
     <startEvent id="start" />
-    <userTask id="task_hello_world" name="Hello World" camunda:assignee="${variables.get('myPerformer')}" >
-      <extensionElements>
-        <camunda:properties>
-          <camunda:property name="variable:myPerformer" value="Identity" />
-        </camunda:properties>
-      </extensionElements>
+    <userTask id="task_hello_world" name="Hello World" camunda:candidateUsers="${variables.get('myPerformer')}" camunda:priority="50" >
       <multiInstanceLoopCharacteristics
             isSequential="false"
             camunda:collection="${variables.get('performers')}"
