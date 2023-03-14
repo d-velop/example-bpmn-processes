@@ -25,7 +25,7 @@
         </camunda:inputOutput>
       </extensionElements>
     </receiveTask>
-    <userTask id="task_hello_world" name="${variables.get('greeting')}" camunda:assignee="${variables.get('dv_initiator')}" />
+    <userTask id="task_hello_world" name="${variables.get('greeting')}" camunda:candidateUsers="${variables.get('dv_initiator')}" />
     <endEvent id="end" />
     <sequenceFlow id="s1" sourceRef="start" targetRef="call_service" />
     <sequenceFlow id="s2" sourceRef="call_service" targetRef="receive_service_response" />
