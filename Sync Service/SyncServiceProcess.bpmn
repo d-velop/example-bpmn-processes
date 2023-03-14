@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" targetNamespace="">
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:camunda="http://camunda.org/schema/1.0/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" targetNamespace="" exporter="d.velop process modeler" exporterVersion="1.0.0">
   <process id="sync_service_process" name="Sync Service Process" isExecutable="true">
     <extensionElements>
       <camunda:properties>
         <camunda:property name="service:/process/services/helloworld/sync:in:yourName" value="String" />
         <camunda:property name="service:/process/services/helloworld/sync:out:greeting" value="String" />
+        <camunda:property name="service:/process/services/helloworld/sync:name" value="Hello World" />
         <camunda:property name="variable:greeting" value="String" />
       </camunda:properties>
     </extensionElements>
@@ -23,7 +24,7 @@
         </camunda:inputOutput>
       </extensionElements>
     </sendTask>
-    <userTask id="task_hello_world" name="${variables.get('greeting')}" camunda:assignee="${variables.get('dv_initiator')}" />      
+    <userTask id="task_hello_world" name="${variables.get('greeting')}" camunda:candidateUsers="${variables.get('dv_initiator')}" camunda:priority="50" />      
     <endEvent id="end" />
     <sequenceFlow id="s1" sourceRef="start" targetRef="call_service" />
     <sequenceFlow id="s2" sourceRef="call_service" targetRef="task_hello_world" />
