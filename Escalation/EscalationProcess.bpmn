@@ -28,7 +28,7 @@
       <startEvent id="sub_start" isInterrupting="false">
         <escalationEventDefinition escalationRef="time_escalation" camunda:escalationCodeVariable="escalationCode" />
       </startEvent>
-      <userTask id="sub_task_escalation" name="Escalation occurred" camunda:assignee="${variables.get('dv_initiator')}" />
+      <userTask id="sub_task_escalation" name="Escalation occurred" camunda:candidateUsers="${variables.get('dv_initiator')}" />
       <endEvent id="sub_end" />
       <sequenceFlow id="sub_s1" sourceRef="sub_start" targetRef="sub_task_escalation" />
       <sequenceFlow id="sub_s2" sourceRef="sub_task_escalation" targetRef="sub_end" />
